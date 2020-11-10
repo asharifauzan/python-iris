@@ -1,31 +1,16 @@
-import numpy as np
 import pandas as pd
-from sklearn import neighbors, datasets
-from sklearn import preprocessing
+from sklearn.neighbors import KNeighborsClassifier
 
 n_neighbors = 6
 
-# import some data to play with
-iris = pd.read_csv('iris.csv')
+data = pd.read_csv('iris.csv', header = 0)
+fitur = data.iloc[:, 0:2].values
+label = data.iloc[:, -1].values
 
-# prepare data
-X = iris.data[:, 0:4]
-y = iris.target
-h = .02
+model = KNeighborsClassifier(n_neighbors, weights='distance')
+model.fit(fitur, label)
 
-# we create an instance of Neighbours Classifier and fit the data.
-clf = neighbors.KNeighborsClassifier(n_neighbors, weights='distance')
-clf.fit(X, y)
-
-# make prediction
-sl = input('Enter sepal length (cm): ')
-sw = input('Enter sepal width (cm): ')
-dataClass = clf.predict([[sl,sw]])
-print('Prediction: '),
-
-if dataClass == 0:
-    print('Iris Setosa')
-elif dataClass == 1:
-    print('Iris Versicolour')
-else:
-    print('Iris Virginica')
+length = float(input('Masukkan Panjang Sepal (cm) : '))
+width = float(input('Masukkan Lebar Sepal (cm) : '))
+prediction = model.predict([[length, width]])
+print('Prediction : ' + prediction)
